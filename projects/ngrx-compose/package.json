@@ -18,7 +18,7 @@
     "angular"
   ],
   "author": "Emanuele Tuttolani",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/SpellCodes/ngrx-compose/issues"
   },
