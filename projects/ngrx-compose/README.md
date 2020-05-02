@@ -1,24 +1,56 @@
-# NgrxCompose
+# NGRX Compose
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.3.
+## Quick Start
 
-## Code scaffolding
+- `npm i @spellcodes/ngrx-compose`
+- Include `NgrxComposeModule` in your module
+- Create `store/containers/my-container.container.ts`
+- Compose your first container
 
-Run `ng generate component component-name --project ngrx-compose` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project ngrx-compose`.
-> Note: Don't forget to add `--project ngrx-compose` or else it will be added to the default project in your `angular.json` file. 
+  ```typescript
+  @Injectable({ providedIn: "root" })
+  export class EmployeeContainer {
+    employeeListContainer:       ContainerShip<EmployeeListDTO>;
+    employeeDetailsContainer:    ContainerShip<EmployeeListDTO>;
+    employeeOfTheMonthContainer: ContainerShip<EmployeeOfTheMonthDTO>;
 
-## Build
+    constructor(private readonly ngrxComposeService: NgrxComposeService) {
+      this.employeeListContainer = ({ company }) =>
+        this.ngrxComposeService.createContainer(loadEmployeeList({ company }));
 
-Run `ng build ngrx-compose` to build the project. The build artifacts will be stored in the `dist/` directory.
+      this.employeeDetailsContainer = ({ company }) =>
+        this.ngrxComposeService.createContainer(loadEmployeeDetails(), [
+          this.employeeListContainer({ company }),
+        ]);
 
-## Publishing
+      this.employeeOfTheMonthContainer = ({ userId, company }) =>
+        this.ngrxComposeService.createContainer(
+          loadEmployeeOfTheMonth({ userId }),
+          [this.employeeDetailsContainer({ company })]
+        );
+    }
+  }
+  ```
 
-After building your library with `ng build ngrx-compose`, go to the dist folder `cd dist/ngrx-compose` and run `npm publish`.
+- Start using it
 
-## Running unit tests
+  ```typescript
+  export class MyComponent implements OnInit {
 
-Run `ng test ngrx-compose` to execute the unit tests via [Karma](https://karma-runner.github.io).
+  constructor(
+    private readonly ngrxCmposeService: NgrxComposeService,
+    private readonly employeeContainer: EmployeeContainer,
+  ) {}
 
-## Further help
+  ngOnInit(): void {
+    this.ngrxCmposeService.dispatch(
+      this.employeeContainer.employeeOfTheMonth({
+        userId: '1337',
+        company: 'E Corp'
+      }),
+    );
+  ```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+## Usage and API
+
+TODO
