@@ -1,6 +1,6 @@
 {
   "name": "@spellcodes/ngrx-compose",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "peerDependencies": {
     "@angular/common": "^9.1.3",
     "@angular/core": "^9.1.3",

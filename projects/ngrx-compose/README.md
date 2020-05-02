@@ -37,18 +37,21 @@
   ```typescript
   export class MyComponent implements OnInit {
 
-  constructor(
-    private readonly ngrxCmposeService: NgrxComposeService,
-    private readonly employeeContainer: EmployeeContainer,
-  ) {}
+    constructor(
+      private readonly ngrxCmposeService: NgrxComposeService,
+      private readonly employeeContainer: EmployeeContainer,
+    ) {}
 
-  ngOnInit(): void {
-    this.ngrxCmposeService.dispatch(
-      this.employeeContainer.employeeOfTheMonth({
-        userId: '1337',
-        company: 'E Corp'
-      }),
-    );
+    ngOnInit(): void {
+      this.ngrxCmposeService.dispatch(
+        this.employeeContainer.employeeOfTheMonth({
+          userId: '1337',
+          company: 'E Corp'
+        }),
+      );
+    }
+
+  }
   ```
 
 ## Usage and API
