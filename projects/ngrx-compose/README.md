@@ -8,25 +8,32 @@
 - Compose your first container
 
   ```typescript
-  @Injectable({ providedIn: "root" })
+  @Injectable({ providedIn: 'root' })
   export class EmployeeContainer {
     employeeListContainer:       ContainerShip<EmployeeListDTO>;
     employeeDetailsContainer:    ContainerShip<EmployeeListDTO>;
     employeeOfTheMonthContainer: ContainerShip<EmployeeOfTheMonthDTO>;
 
-    constructor(private readonly ngrxComposeService: NgrxComposeService) {
+    constructor(
+      private readonly ngrxComposeService: NgrxComposeService,
+    ) {
       this.employeeListContainer = ({ company }) =>
         this.ngrxComposeService.createContainer(loadEmployeeList({ company }));
 
       this.employeeDetailsContainer = ({ company }) =>
-        this.ngrxComposeService.createContainer(loadEmployeeDetails(), [
-          this.employeeListContainer({ company }),
-        ]);
+        this.ngrxComposeService.createContainer(
+          loadEmployeeDetails(),
+          [
+            this.employeeListContainer({ company }),
+          ],
+        );
 
       this.employeeOfTheMonthContainer = ({ userId, company }) =>
         this.ngrxComposeService.createContainer(
           loadEmployeeOfTheMonth({ userId }),
-          [this.employeeDetailsContainer({ company })]
+          [
+            this.employeeDetailsContainer({ company }),
+          ]
         );
     }
   }
