@@ -4,4 +4,4 @@ import { NgrxComposeService } from './ngrx-compose.service';
 @NgModule({
   providers: [NgrxComposeService],
 })
-export class NgrxComposeModule { }
+export class NgrxComposeModule {}

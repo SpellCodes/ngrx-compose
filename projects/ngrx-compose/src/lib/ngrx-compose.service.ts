@@ -12,9 +12,10 @@ export class NgrxComposeService {
   ) { }
 
   /**
-   * Create container to dispatch later on, alone or with others
-   * @param action
-   * @param dependencies
+   * Create a container to dispatch later on using the `dispatch` method
+   *
+   * @param action The action you need to dispatch
+   * @param dependencies Actions to dispatch before the first parameter
    */
   createContainer(action: Action, dependencies?: Container[]): Container {
     return {
@@ -25,6 +26,8 @@ export class NgrxComposeService {
 
   /**
    * Dispatch the wanted action and its dependencies
+   *
+   * @param container Put here the container created earlier
    */
   dispatch({ action, dependencies = [] }: Container): void {
     this.dispatchDependencies(...dependencies);
@@ -33,7 +36,6 @@ export class NgrxComposeService {
 
   /**
    * Recursively consume container's dependencies
-   * @param containers
    */
   private dispatchDependencies(...containers: Container[]) {
     for (const container of containers) {
