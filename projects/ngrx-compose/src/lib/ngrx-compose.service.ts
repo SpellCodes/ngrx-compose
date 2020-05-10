@@ -5,11 +5,11 @@ import { Container } from './container.model';
 @Injectable({
   providedIn: 'root'
 })
-export class NgrxComposeService {
+export class NgrxComposeService<T> {
 
   constructor(
-    private readonly store: Store<any>,
-  ) { }
+    private readonly store: Store<T>,
+  ) {}
 
   /**
    * Create a container to dispatch later on using the `dispatch` method
