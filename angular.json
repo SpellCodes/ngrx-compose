@@ -30,19 +30,19 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
+            "eslintConfig": ".eslintrc.js",
             "tsConfig": [
               "projects/ngrx-compose/tsconfig.lib.json",
               "projects/ngrx-compose/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
-    }},
+    }
+  },
   "cli": {
     "analytics": "b979d691-512f-4f29-9ae0-0f7eb718b7b0"
   },

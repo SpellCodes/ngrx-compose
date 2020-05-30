@@ -5,7 +5,8 @@
     "@angular/common": "^9.1.3",
     "@angular/core": "^9.1.3",
     "tslib": "^1.10.0",
-    "@ngrx/store": "^9.1.0"
+    "@ngrx/store": "^9.1.0",
+    "rxjs": "^6.5.5"
   },
   "description": "Compose your NGRX dispatches and call them all at once",
   "main": "index.js",

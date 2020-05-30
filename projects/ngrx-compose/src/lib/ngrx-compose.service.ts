@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Store, Action } from '@ngrx/store';
-import { Container } from './container.model';
+import { Action, select, Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { Container, Delivery, FetchPolicy } from './models';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class NgrxComposeService<T> {
-
-  constructor(
-    private readonly store: Store<T>,
-  ) {}
+export class NgrxComposeService<State> {
+  constructor(private readonly store: Store<State>) {}
 
   /**
    * Create a container to dispatch later on using the `dispatch` method
@@ -20,7 +19,7 @@ export class NgrxComposeService<T> {
   createContainer(action: Action, dependencies?: Container[]): Container {
     return {
       action,
-      dependencies
+      dependencies,
     };
   }
 
@@ -35,18 +34,50 @@ export class NgrxComposeService<T> {
   }
 
   /**
-   * Recursively consume container's dependencies
+   * Return an observable after dispatching (or not) a container,
+   * based off optional conditions
    */
-  private dispatchDependencies(...containers: Container[]) {
-    for (const container of containers) {
-      if (container.dependencies) {
-        for (const dep of container.dependencies) {
-          this.dispatchDependencies(dep);
-        }
-      }
+  delivery<Result>(delivery: Delivery<State, Result>): Observable<Result> {
+    const {
+      selector,
+      container,
+      fetchPolicy,
+      emptyCondition,
+    } = delivery;
 
-      this.dispatch({ action: container.action });
+    switch (fetchPolicy) {
+      case FetchPolicy.CacheAndNetwork:
+        this.dispatch(container);
+        return this.store.pipe(select(selector));
+
+      case FetchPolicy.CacheOnly:
+        return this.store.pipe(select(selector));
+
+      case FetchPolicy.CacheFirst:
+      default:
+        return this.store.pipe(
+          select(selector),
+          tap((result) => {
+            if (emptyCondition ? emptyCondition(result) : result == null) {
+              this.dispatch(container);
+            }
+          }),
+        );
     }
   }
 
+  /**
+   * Recursively consume container's dependencies
+   */
+  private dispatchDependencies(...containers: Container[]): void {
+    containers.forEach((container) => {
+      if (container.dependencies) {
+        container.dependencies.forEach((dependency) => {
+          this.dispatchDependencies(dependency);
+        });
+      }
+
+      this.dispatch({ action: container.action });
+    });
+  }
 }
