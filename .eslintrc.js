@@ -83,7 +83,7 @@ module.exports = {
     {
       files: ['projects/**/*.spec.ts', 'projects/**/*.d.ts'],
       parserOptions: {
-        project: './tsconfig.spec.json',
+        project: './tsconfig.json',
       },
       extends: ['plugin:jasmine/recommended'],
       plugins: ['jasmine'],
